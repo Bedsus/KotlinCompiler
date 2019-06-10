@@ -1,0 +1,35 @@
+ClassDecl -> Modifiers class id  { ClassBody } | EPSILON
+Modifiers -> public | private | EPSILON
+ClassBody -> ClassMember ClassBody | EPSILON
+ClassMember -> Modifiers RestOfClassMember
+RestOfClassMember -> Method | Variables
+Method -> fun id MethodContinue
+MethodContinue -> ( MethodParams ) TypeBlock { MethodBody }
+MethodParams -> MethodOneParam MethodParamContinue | EPSILON
+MethodOneParam -> id : Type
+MethodParamContinue -> , MethodOneParam MethodParamContinue | EPSILON
+Variables -> var id Assignment | val id Assignment
+Assignment -> TypeBlock = Expression
+TypeBlock -> : Type | EPSILON
+Type -> id | BasicType
+BasicType -> Int | Double
+MethodBody -> Statement MethodBody | EPSILON
+Statement -> VarDecl | IfElseBlock | WhileBlock | ReturnBlock | BlockDecl
+BlockDecl -> { MethodBody }
+IfElseBlock -> if ( BoolExpr ) Statement else Statement
+WhileBlock -> while ( BoolExpr ) Statement
+ReturnBlock -> return Expression
+VarDecl -> Variables | id Assignment2
+Assignment2 -> Assignment | Variable
+Variable -> ( MethodValues ) Link | . id Variable3
+Variable3 -> ( MethodValues ) Link | EPSILON
+Variable2 -> Variable | EPSILON
+Link -> . id ( MethodValues ) Link | EPSILON
+MethodValues -> Expression ValueContinue | EPSILON
+ValueContinue -> , Expression ValueContinue | EPSILON
+BoolExpr -> true | false | Expression CompareOp Expression 
+Expression -> Term ExprOp | null
+Term -> intConst | doubleConst | id Variable2 | ( Expression )
+ExprOp -> ArithmOp Term ExprOp | EPSILON
+ArithmOp -> + | - | * | / | =
+CompareOp -> > | < | == | !=
