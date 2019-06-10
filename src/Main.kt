@@ -1,27 +1,13 @@
 import java.io.FileReader
 import java.io.IOException
-import java.util.*
 
 fun main() {
     val linesCodes = getLinesReadFiles("test.kt")
     val compiler = Compiler(linesCodes)
     compiler.start()
-  /*  println("""$redColor
-     |----------------------------------|
-     |            L E X E R             |
-     |----------------------------------|
-     $defaultColor
-    """.trimIndent())
-    println(compiler.getTokens(false))
-    println("""
-
-        $redColor
-        |----------------------------------|
-        |           P A R S E R            |
-        |----------------------------------|
-     $defaultColor
-    """.trimIndent())
-    println(compiler.rule)*/
+    compiler.showTokens()
+    compiler.showRules()
+    compiler.showSymbolTable()
 }
 
 /**
@@ -30,7 +16,7 @@ fun main() {
  * @return массив строк считанного файла
  */
 private fun getLinesReadFiles(file: String): List<LinesCode> {
-    val lines = ArrayList<LinesCode>()
+    val lines = mutableListOf<LinesCode>()
     var position = 1
     try {
         FileReader(file).use { reader ->

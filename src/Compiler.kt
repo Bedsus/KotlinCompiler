@@ -37,8 +37,38 @@ internal class Compiler(
      */
     fun start() {
         lexer()
-        println(lexer.showTable())
         parser()
+    }
+
+    fun showTokens(){
+        println("""$redColor
+        |----------------------------------|
+        |            L E X E R             |
+        |----------------------------------|
+        $defaultColor
+    """.trimIndent())
+        println(getTokens(false))
+    }
+
+    fun showRules(){
+        println("""
+        $redColor
+        |----------------------------------|
+        |           P A R S E R            |
+        |----------------------------------|
+     $defaultColor
+    """.trimIndent())
+        println(rule)
+    }
+
+    fun showSymbolTable(){
+        println("""$redColor
+        |----------------------------------|
+        |     S Y M B O L   T A B L E      |
+        |----------------------------------|
+        $defaultColor
+    """.trimIndent())
+        println(lexer.showTable())
     }
 
     /**

@@ -40,9 +40,9 @@ class Token(
 enum class TokenType {
 
     BlockCommentNew, BlockCommentEnd, LineComment, WhiteSpace, Tab, NewLine, CloseBrace, OpenBrace, Value, Variable,
-    Int, OpeningCurlyBrace, ClosingCurlyBrace, DoubleConstant, IntConstant, Plus, Minus, Multiply, CommentLine,
-    Divide, Point, EqualEqual, Equal, NotEqual, Greater, Less, Public, Private,  Double, False, Identifier,
-    True, Null, Return, Extends, Class, If, While, Else, Comma, EndLine;
+    Class, Function, Int, OpeningCurlyBrace, ClosingCurlyBrace, DoubleConstant, IntConstant, Plus, Minus, Multiply,
+    CommentLine, Divide, Point, EqualEqual, Equal, NotEqual, Greater, Less, Public, Private,  Double, False,
+    True, Null, Return, Extends, If, While, Else, Comma, EndLine, Identifier;
 
     /**
      * Определяет, является ли этот токен вспомогательным
@@ -78,6 +78,7 @@ class RegExToken {
         regEx[TokenType.Extends] = "(:).*"
         regEx[TokenType.Value] = "\\b(val)\\b.*"
         regEx[TokenType.Variable] = "\\b(var)\\b.*"
+        regEx[TokenType.Function] = "\\b(fun)\\b.*"
         regEx[TokenType.Comma] = "(,).*"
         regEx[TokenType.OpeningCurlyBrace] = "(\\{).*"
         regEx[TokenType.ClosingCurlyBrace] = "(\\}).*"

@@ -1,5 +1,9 @@
 package tableSymbol
 
+import blueColor
+import defaultColor
+import violetColor
+
 /**
  * Реализация таблицы символов.
  * Переменые распредиляются по времени жизни в отдельных списках.
@@ -14,7 +18,7 @@ class TableSymbol<T> {
     /**
      * Основной узел дерева
      */
-    private val treeNode = TreeNode<T>( nodeNumber, mutableMapOf())
+    private val treeNode = TreeNode<T>( nodeNumber, "-", mutableMapOf())
     /**
      * Текуший узел. В него будут добавлятся переменные
      */
@@ -23,9 +27,9 @@ class TableSymbol<T> {
     /**
      * Создание узла (нового scope)
      */
-    fun createNode() {
+    fun createNode(name: String) {
         nodeNumber++
-        val newTree = TreeNode<T>( nodeNumber, mutableMapOf())
+        val newTree = TreeNode<T>( nodeNumber, name, mutableMapOf())
         currentTree.addChild(newTree)
         currentTree = newTree
     }
@@ -35,6 +39,7 @@ class TableSymbol<T> {
      */
     fun previousTreeNode() {
         currentTree = currentTree.parent ?: return
+        nodeNumber--
            // throw IllegalArgumentException("Попытка отката к несуществующему родительскому узлу")
     }
 
@@ -48,7 +53,7 @@ class TableSymbol<T> {
         }
         currentTree.variables[name] = Variable(properties, type, value)
     }
-
+/**
     /**
      * Изменение значения у переменной
      */
@@ -65,7 +70,7 @@ class TableSymbol<T> {
         }
         variable.value = value
     }
-
+ */
     /**
      * Получить данные переменной
      */
@@ -85,7 +90,7 @@ class TableSymbol<T> {
  * @param number имя переменной
  * @param variables тип переменной
  */
-class TreeNode<T>(private val number: Int, val variables : MutableMap<String, Variable<T>>) {
+class TreeNode<T>(private val number: Int, private val name: String, val variables : MutableMap<String, Variable<T>>) {
 
     var parent : TreeNode<T>? = null
     var children = mutableListOf<TreeNode<T>>()
@@ -96,12 +101,17 @@ class TreeNode<T>(private val number: Int, val variables : MutableMap<String, Va
     }
 
     override fun toString(): String {
-        var s = "$number:\n"
-        for((key, value) in variables){
-            s += "${value.properties} $key : ${value.type} = ${value.value} \n"
-        }
-        if (children.isNotEmpty()) {
-            s += " [" + children.map { it.toString() } + " ]"
+        var s = ""
+        if (variables.values.isNotEmpty()) {
+            s += "$number: $violetColor $name $defaultColor [parent: $violetColor ${ parent?.name ?: "-" }$defaultColor]\n"
+            for ((key, value) in variables) {
+                s += " $blueColor  ${value.properties} $key : ${value.type} $defaultColor \n"
+            }
+            if (children.isNotEmpty()) {
+                for (node in children) {
+                    s += node.toString()
+                }
+            }
         }
         return s
     }
@@ -120,7 +130,7 @@ class Variable<T>(val properties: Properties, val type: Type, var value: T)
 /**
  * Тип данных у переменной
  */
-enum class Type { Int, Double; }
+enum class Type { Int, Double, None; }
 
 /**
  * Свойства переменой

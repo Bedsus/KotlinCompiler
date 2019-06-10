@@ -35,13 +35,13 @@ class Test {
         if (true) {
             b = b + (d - a)
         } else {
-
+            var s : String = g
         }
         if (c < 2) {
             d = d * 2
-        } //else {
+        } else {
             c = 0
-        //}
+        }
         return d * b
     }
 }
