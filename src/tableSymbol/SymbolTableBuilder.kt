@@ -6,13 +6,18 @@ import lexer.TokenType
 class SymbolTableBuilder {
 
     private val symbolTable = TableSymbol<String>()
-    private var nameNode: String? = null
+
     private var isCreateValue = false
     private var isCreateNode = false
+    private var isReadValue = false
 
     private var name: String? = null
     private var properties: Properties? = null
     private var type: String? = null
+
+    private var nameNode: String? = null
+
+    private var nameRead: String? = null
 
     /**
      * Формирование таблицы символов
@@ -20,27 +25,21 @@ class SymbolTableBuilder {
     fun addVariableSymbolTable(token: Token) {
         val tokenType = token.tokenType
         when {
-            isCreateNode -> when (tokenType) {
-                // {
-                TokenType.OpeningCurlyBrace -> {
-                    symbolTable.createNode(nameNode!!)
-                    nameNode = null
-                    isCreateNode = false
-                }
-                // id
-                TokenType.Identifier -> {
-                    if (nameNode == null) {
-                        nameNode = token.tokenString
+            isReadValue -> when (tokenType) {
+                TokenType.Equal, TokenType.Less, TokenType.Greater, TokenType.NotEqual,
+                TokenType.CloseBrace, TokenType.EqualEqual, TokenType.Divide, TokenType.Multiply,
+                TokenType.NewLine, TokenType.Comma, TokenType.Plus, TokenType.Minus -> {
+                    if (nameRead != null) {
+                        symbolTable.getValue(nameRead!!, token)
+                        isReadValue = false
+                        nameRead = null
                     }
                 }
-                // (i: Int, d: Double) - игнорируем
-                TokenType.WhiteSpace, TokenType.OpenBrace, TokenType.CloseBrace,
-                TokenType.Extends, TokenType.Int, TokenType.Double, TokenType.Comma -> {
-
-                }
+                TokenType.WhiteSpace -> { }
                 else -> {
-                    isCreateNode = false
-                    nameNode = null
+                    isReadValue = false
+                    nameRead = null
+                    analyzeToken(token)
                 }
             }
             isCreateValue -> when (tokenType) {
@@ -49,24 +48,16 @@ class SymbolTableBuilder {
                     if (name == null) {
                         name = token.tokenString
                     } else if (type == null) {
-                        type = token.tokenString
+                        addVariable(token.tokenString, token)
                     }
                 }
                 // =
                 TokenType.Equal -> {
-                    if (name != null && properties != null) {
-                        symbolTable.addVariable(name!!, properties!!, type ?: "None", "")
-                        isCreateValue = false
-                        name = null
-                        properties = null
-                        type = null
-                    }
+                    addVariable(null, token)
                 }
                 // Double
                 TokenType.Double, TokenType.Int -> {
-                    if (type == null) {
-                        type = token.tokenString
-                    }
+                    addVariable(token.tokenString, token)
                 }
                 // ':', ' '
                 TokenType.Extends, TokenType.WhiteSpace -> { }
@@ -78,50 +69,102 @@ class SymbolTableBuilder {
                     nameNode = null
                 }
             }
-            else -> when (tokenType) {
-                // val
-                TokenType.Value -> {
-                    isCreateValue()
-                    properties = Properties.Val
-                }
-                // var
-                TokenType.Variable -> {
-                    isCreateValue()
-                    properties = Properties.Var
-                }
-                // class
-                TokenType.Class -> {
-                    isCreateNode()
-                }
-                // fun
-                TokenType.Function -> {
-                    isCreateNode()
+            isCreateNode -> when (tokenType) {
+                // ( - аргументы класса или функции
+                TokenType.OpenBrace, TokenType.Comma -> {
+                    isCreateValue = true
                 }
                 // {
                 TokenType.OpeningCurlyBrace -> {
-                    if(!isCreateNode) {
-                        symbolTable.createNode("block")
-                        nameNode = null
-                        isCreateNode = false
+                    nameNode = null
+                    isCreateNode = false
+                }
+                // id
+                TokenType.Identifier -> {
+                    if (nameNode == null) {
+                        nameNode = token.tokenString
+                        symbolTable.createNode(nameNode!!)
                     }
                 }
-                // }
-                TokenType.ClosingCurlyBrace -> {
-                    symbolTable.previousTreeNode()
+                // (i: Int, d: Double) - игнорируем
+                TokenType.WhiteSpace, TokenType.CloseBrace, TokenType.Extends, TokenType.Int, TokenType.Double -> { }
+                else -> {
+                    isCreateNode = false
+                    nameNode = null
                 }
-                else -> { }
             }
+            else -> analyzeToken(token)
+        }
+    }
+
+    private fun analyzeToken(token: Token) {
+        when (token.tokenType) {
+            // id
+            TokenType.Identifier -> {
+                isReadValue()
+                if (nameRead == null) {
+                    nameRead = token.tokenString
+                }
+            }
+            // val
+            TokenType.Value -> {
+                isCreateValue()
+                properties = Properties.Val
+            }
+            // var
+            TokenType.Variable -> {
+                isCreateValue()
+                properties = Properties.Var
+            }
+            // class
+            TokenType.Class -> {
+                isCreateNode()
+            }
+            // fun
+            TokenType.Function -> {
+                isCreateNode()
+            }
+            // {
+            TokenType.OpeningCurlyBrace -> {
+                if(!isCreateNode) {
+                    symbolTable.createNode("block")
+                    nameNode = null
+                    isCreateNode = false
+                }
+            }
+            // }
+            TokenType.ClosingCurlyBrace -> {
+                symbolTable.previousTreeNode()
+            }
+            else -> { }
+        }
+    }
+
+    private fun addVariable(type: String?, token: Token){
+        if (name != null) {
+            symbolTable.addVariable(name!!, properties ?: Properties.Val, type ?: "None", "", token)
+            isCreateValue = false
+            name = null
+            properties = null
         }
     }
 
     private fun isCreateValue() {
         isCreateValue = true
         isCreateNode = false
+        isReadValue = false
     }
 
     private fun isCreateNode() {
         isCreateValue = false
         isCreateNode = true
+        isReadValue = false
+    }
+
+    private fun isReadValue() {
+        isCreateValue = false
+        isCreateNode = false
+        isReadValue = true
     }
 
     fun show() = symbolTable.showTreeNode()

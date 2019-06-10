@@ -2,6 +2,7 @@ package tableSymbol
 
 import blueColor
 import defaultColor
+import lexer.Token
 import violetColor
 
 /**
@@ -12,44 +13,43 @@ import violetColor
 class TableSymbol<T> {
 
     /**
-     * Номер узла дерева, увеличивается каждый раз, как создается узел
+     * Уровень погружения узла дерева, увеличивается каждый раз, как создается узел
      */
-    private var nodeNumber = 0
+    private var level = 0
     /**
      * Основной узел дерева
      */
-    private val treeNode = TreeNode<T>( nodeNumber, "main", mutableMapOf())
+    private val treeNode = TreeNode<T>(level, "main", mutableMapOf())
     /**
      * Текуший узел. В него будут добавлятся переменные
      */
-    private var currentTree : TreeNode<T> = treeNode
+    private var currentTree = treeNode
 
     /**
      * Создание узла (нового scope)
      */
     fun createNode(name: String) {
-        nodeNumber++
-        val newTree = TreeNode<T>( nodeNumber, name, mutableMapOf())
+        level++
+        val newTree = TreeNode<T>(level, name, mutableMapOf())
         currentTree.addChild(newTree)
         currentTree = newTree
     }
 
     /**
-     * Откат по дереву на предыдущий узел
+     * Откат по дереву на предыдущий узел (уровень)
      */
     fun previousTreeNode() {
         currentTree = currentTree.parent ?: return
-        nodeNumber--
-           // throw IllegalArgumentException("Попытка отката к несуществующему родительскому узлу")
+        level--
     }
 
     /**
      * Добавление переменной
      */
-    fun addVariable(name: String, properties: Properties, type: String, value: T) {
+    fun addVariable(name: String, properties: Properties, type: String, value: T, token: Token) {
         val currentVariable = currentTree.variables[name]
         if (currentVariable != null) {
-            throw IllegalArgumentException("Попытка добавления существующей переменной")
+            throw IllegalArgumentException("Таблица символов: Попытка добавления существующей переменной ${token.position()}")
         }
         currentTree.variables[name] = Variable(properties, type, value)
     }
@@ -57,9 +57,17 @@ class TableSymbol<T> {
     /**
      * Получить данные переменной
      */
-    fun getValue(name: String) : T {
-        val variable = currentTree.variables[name] ?:
-            throw IllegalArgumentException("Попытка получения данных у несуществующей переменной")
+    fun getValue(name: String, token: Token) : T {
+        var variable : Variable<T>? = currentTree.variables[name]
+        var treeNode: TreeNode<T>? = currentTree
+        while (variable == null) {
+            if (treeNode != null) {
+                variable = treeNode.variables[name]
+                treeNode = treeNode.parent
+            } else {
+                throw IllegalArgumentException("Таблица символов: Попытка получения данных у несуществующей переменной ${token.position()}")
+            }
+        }
         return variable.value
     }
 

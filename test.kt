@@ -17,6 +17,7 @@ class Test {
                 a = a - 5
             }
         }
+
         // create object
         val t1: Int = 1
         val t3: Int = 3
@@ -26,8 +27,10 @@ class Test {
         return a
     }
 
+    val res = 111
+
     private fun myFunc2(b: Double, c: Int): Double {
-        var c: Int = c
+       // val c = 0
         if (true) {
             b = b + (d - a)
         } else {
@@ -40,6 +43,7 @@ class Test {
         }
         return d * b
     }
+
 
     fun main1() {
         val eps: Double = 2.7
