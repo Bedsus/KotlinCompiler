@@ -1,6 +1,7 @@
 import exceptions.AnalyzerException
 import lexer.Lexer
 import parser.Parser
+import tableSymbol.SymbolTableBuilder
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -19,18 +20,9 @@ internal class Compiler(
     private val sourceCode: List<LinesCode>
 ) {
 
-    private val lexer: Lexer = Lexer()
-    private val parser: Parser = Parser()
-
-    val rule: String
-        get() {
-            val stringBuilder = StringBuilder()
-            for (r in parser.getSequenceOfAppliedRules()) {
-                stringBuilder.append(r.toString())
-                    .append("\n")
-            }
-            return stringBuilder.toString()
-        }
+    private val lexer = Lexer()
+    private val parser = Parser()
+    private val symbolTable = SymbolTableBuilder()
 
     /**
      * запускаем процесс компиляции
@@ -38,37 +30,16 @@ internal class Compiler(
     fun start() {
         lexer()
         parser()
+        symbolTable()
     }
 
-    fun showTokens(){
-        println("""$redColor
-        |----------------------------------|
-        |            L E X E R             |
-        |----------------------------------|
-        $defaultColor
-    """.trimIndent())
-        println(getTokens(false))
-    }
-
-    fun showRules(){
-        println("""
-        $redColor
-        |----------------------------------|
-        |           P A R S E R            |
-        |----------------------------------|
-     $defaultColor
-    """.trimIndent())
-        println(rule)
-    }
-
-    fun showSymbolTable(){
-        println("""$redColor
-        |----------------------------------|
-        |     S Y M B O L   T A B L E      |
-        |----------------------------------|
-        $defaultColor
-    """.trimIndent())
-        println(lexer.showTable())
+    /**
+     * Создание таблицы символов
+     */
+    private fun symbolTable(){
+        for (token in lexer.tokens) {
+            symbolTable.addVariableSymbolTable(token)
+        }
     }
 
     /**
@@ -107,7 +78,7 @@ internal class Compiler(
      * @param isAll выводить ли все токены, или только основные
      * @return оисание токенов
      */
-    fun getTokens(isAll: Boolean): String {
+    private fun getTokens(isAll: Boolean): String {
         val str = StringBuilder()
         var i = 0
         for (token in lexer.tokens) {
@@ -128,4 +99,43 @@ internal class Compiler(
         return str.toString()
     }
 
+    private fun getRules(): String {
+        val stringBuilder = StringBuilder()
+        for (r in parser.getSequenceOfAppliedRules()) {
+            stringBuilder.append(r.toString())
+                .append("\n")
+        }
+        return stringBuilder.toString()
+    }
+
+    fun showTokens(){
+        println("""$redColor
+        |----------------------------------|
+        |            L E X E R             |
+        |----------------------------------|
+        $defaultColor
+    """.trimIndent())
+        println(getTokens(false))
+    }
+
+    fun showRules(){
+        println("""
+        $redColor
+        |----------------------------------|
+        |           P A R S E R            |
+        |----------------------------------|
+     $defaultColor
+    """.trimIndent())
+       println(getRules())
+    }
+
+    fun showSymbolTable(){
+        println("""$redColor
+        |----------------------------------|
+        |     S Y M B O L   T A B L E      |
+        |----------------------------------|
+        $defaultColor
+    """.trimIndent())
+        println(symbolTable.show())
+    }
 }

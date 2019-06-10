@@ -46,31 +46,14 @@ class TableSymbol<T> {
     /**
      * Добавление переменной
      */
-    fun addVariable(name: String, properties: Properties, type: Type, value: T) {
+    fun addVariable(name: String, properties: Properties, type: String, value: T) {
         val currentVariable = currentTree.variables[name]
         if (currentVariable != null) {
             throw IllegalArgumentException("Попытка добавления существующей переменной")
         }
         currentTree.variables[name] = Variable(properties, type, value)
     }
-/**
-    /**
-     * Изменение значения у переменной
-     */
-    fun updateVariable(name: String, value: T) {
-        var variable : Variable<T>? = currentTree.variables[name]
-        var treeNode: TreeNode<T>? = currentTree
-        while (variable == null) {
-            if (treeNode != null) {
-                variable = treeNode.variables[name]
-                treeNode = treeNode.parent
-            } else {
-                throw IllegalArgumentException("Попытка изменения несуществующей переменной")
-            }
-        }
-        variable.value = value
-    }
- */
+
     /**
      * Получить данные переменной
      */
@@ -103,14 +86,15 @@ class TreeNode<T>(private val number: Int, private val name: String, val variabl
     override fun toString(): String {
         var s = ""
         if (variables.values.isNotEmpty()) {
-            s += "$number: $violetColor $name $defaultColor [parent: $violetColor ${ parent?.name ?: "-" }$defaultColor]\n"
+            s += "$number: $violetColor $name $defaultColor [parent: $violetColor ${parent?.name
+                ?: "-"}$defaultColor]\n"
             for ((key, value) in variables) {
                 s += " $blueColor  ${value.properties} $key : ${value.type} $defaultColor \n"
             }
-            if (children.isNotEmpty()) {
-                for (node in children) {
-                    s += node.toString()
-                }
+        }
+        if (children.isNotEmpty()) {
+            for (node in children) {
+                s += node.toString()
             }
         }
         return s
@@ -121,16 +105,10 @@ class TreeNode<T>(private val number: Int, private val name: String, val variabl
  * Информация о переменной
  *
  * @param properties свойства переменной
- * @param name имя переменной
  * @param type тип переменной
  * @param value вложенное значение переменной
  */
-class Variable<T>(val properties: Properties, val type: Type, var value: T)
-
-/**
- * Тип данных у переменной
- */
-enum class Type { Int, Double, None; }
+class Variable<T>(val properties: Properties, val type: String, var value: T)
 
 /**
  * Свойства переменой

@@ -1,6 +1,0 @@
-package tableSymbol
-
-class Linguistics {
-
-
-}
