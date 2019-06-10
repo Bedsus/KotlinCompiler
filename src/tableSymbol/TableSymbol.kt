@@ -18,7 +18,7 @@ class TableSymbol<T> {
     /**
      * Основной узел дерева
      */
-    private val treeNode = TreeNode<T>( nodeNumber, "-", mutableMapOf())
+    private val treeNode = TreeNode<T>( nodeNumber, "main", mutableMapOf())
     /**
      * Текуший узел. В него будут добавлятся переменные
      */

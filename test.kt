@@ -5,8 +5,8 @@ class Test {
     private var d : Double = 0.1
 
     /**
-     * Ira is a monkey
-     * asasx */
+     * Comments Block yyy-lya-lya
+     */
     fun myFunc1(args: String): Int {
         value = 0.0001
         Test.myFunc2(5.0, 10)
@@ -17,15 +17,12 @@ class Test {
                 a = a - 5
             }
         }
-
         // create object
         val t1 : Int = 1
         val t3 : Int = 3
         t1 = 3
-
         // call methods
         val b : Double = myFunc2(3.0, 4, t1)
-
         return a
     }
 
@@ -45,3 +42,6 @@ class Test {
         return d * b
     }
 }
+
+val x : Int = 0
+val y : Int = 0
