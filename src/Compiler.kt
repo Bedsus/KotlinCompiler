@@ -110,32 +110,28 @@ internal class Compiler(
 
     fun showTokens(){
         println("""$redColor
-        |----------------------------------|
-        |            L E X E R             |
-        |----------------------------------|
-        $defaultColor
-    """.trimIndent())
+|----------------------------------|
+|            L E X E R             |
+|----------------------------------|
+        $defaultColor""".trimIndent())
         println(getTokens(false))
     }
 
     fun showRules(){
-        println("""
-        $redColor
-        |----------------------------------|
-        |           P A R S E R            |
-        |----------------------------------|
-     $defaultColor
-    """.trimIndent())
+        println("""$redColor
+|----------------------------------|
+|           P A R S E R            |
+|----------------------------------|
+     $defaultColor""".trimIndent())
        println(getRules())
     }
 
     fun showSymbolTable(){
         println("""$redColor
-        |----------------------------------|
-        |     S Y M B O L   T A B L E      |
-        |----------------------------------|
-        $defaultColor
-    """.trimIndent())
+|----------------------------------|
+|     S Y M B O L   T A B L E      |
+|----------------------------------|
+        $defaultColor""".trimIndent())
         println(symbolTable.show())
     }
 }
