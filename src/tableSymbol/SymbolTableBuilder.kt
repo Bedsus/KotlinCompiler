@@ -49,6 +49,7 @@ class SymbolTableBuilder {
                         isReadValue = false
                         nameRead = null
                     }
+                    analyzeToken(token)
                 }
             }
             isCreateValue -> when (tokenType) {

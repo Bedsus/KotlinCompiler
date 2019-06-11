@@ -10,7 +10,8 @@ MethodOneParam -> id : Type
 MethodParamContinue -> , MethodOneParam MethodParamContinue | EPSILON
 Variables -> var id Assignment | val id Assignment
 Assignment -> TypeBlock = Expression
-TypeBlock -> : Type | EPSILON
+TypeBlock -> : Type Generic | EPSILON
+Generic -> < Type > | EPSILON
 Type -> id | BasicType
 BasicType -> Int | Double
 MethodBody -> Statement MethodBody | EPSILON

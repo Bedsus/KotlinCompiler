@@ -8,6 +8,7 @@ class Test {
      * Comments Block yyy-lya-lya
      */
     fun myFunc1(args: String): Int {
+        val array : Array<Int> = Array(5) {  }
         value = 0.0001
         Test.myFunc2(5.0, 10)
         while ((a + d) * d < 200) {
@@ -17,7 +18,6 @@ class Test {
                 a = a - 5
             }
         }
-        a = a
         // create object
         val t1: Int = 1
         val t3: Int = 3
