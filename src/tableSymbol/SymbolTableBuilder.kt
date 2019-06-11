@@ -7,8 +7,17 @@ class SymbolTableBuilder {
 
     private val symbolTable = TableSymbol<String>()
 
+    /**
+     * Режим записи новой переменной
+     */
     private var isCreateValue = false
+    /**
+     * Режим создания нового узла
+     */
     private var isCreateNode = false
+    /**
+     * Режим чтения переменной
+     */
     private var isReadValue = false
 
     private var name: String? = null
@@ -21,25 +30,25 @@ class SymbolTableBuilder {
 
     /**
      * Формирование таблицы символов
+     *
+     * @param token проверяемый токен
      */
     fun addVariableSymbolTable(token: Token) {
         val tokenType = token.tokenType
         when {
             isReadValue -> when (tokenType) {
-                TokenType.Equal, TokenType.Less, TokenType.Greater, TokenType.NotEqual,
-                TokenType.CloseBrace, TokenType.EqualEqual, TokenType.Divide, TokenType.Multiply,
-                TokenType.NewLine, TokenType.Comma, TokenType.Plus, TokenType.Minus -> {
+                TokenType.OpenBrace, TokenType.Extends, TokenType.Point -> {
+                    isReadValue = false
+                    nameRead = null
+                    analyzeToken(token)
+                }
+                TokenType.WhiteSpace -> { }
+                else -> {
                     if (nameRead != null) {
                         symbolTable.getValue(nameRead!!, token)
                         isReadValue = false
                         nameRead = null
                     }
-                }
-                TokenType.WhiteSpace -> { }
-                else -> {
-                    isReadValue = false
-                    nameRead = null
-                    analyzeToken(token)
                 }
             }
             isCreateValue -> when (tokenType) {

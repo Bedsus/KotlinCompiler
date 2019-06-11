@@ -17,7 +17,7 @@ class Test {
                 a = a - 5
             }
         }
-
+        a = a
         // create object
         val t1: Int = 1
         val t3: Int = 3
@@ -34,7 +34,7 @@ class Test {
         if (true) {
             b = b + (d - a)
         } else {
-            var s: String = g
+            var s: String = 5
         }
         if (c < 2) {
             d = d * 2

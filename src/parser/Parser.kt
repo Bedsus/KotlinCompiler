@@ -1,6 +1,6 @@
 package parser
 
-import exceptions.AnalyzerException
+import AnalyzerException
 import lexer.Token
 import lexer.TokenType
 import java.io.File

@@ -1,4 +1,3 @@
-import exceptions.AnalyzerException
 import lexer.Lexer
 import parser.Parser
 import tableSymbol.SymbolTableBuilder

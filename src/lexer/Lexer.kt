@@ -1,7 +1,7 @@
 package lexer
 
+import AnalyzerException
 import LinesCode
-import exceptions.AnalyzerException
 import java.util.*
 import java.util.regex.Pattern
 

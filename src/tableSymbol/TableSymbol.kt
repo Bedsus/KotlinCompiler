@@ -1,5 +1,6 @@
 package tableSymbol
 
+import AnalyzerException
 import blueColor
 import defaultColor
 import lexer.Token
@@ -49,7 +50,7 @@ class TableSymbol<T> {
     fun addVariable(name: String, properties: Properties, type: String, value: T, token: Token) {
         val currentVariable = currentTree.variables[name]
         if (currentVariable != null) {
-            throw IllegalArgumentException("Таблица символов: Попытка добавления существующей переменной ${token.position()}")
+            throw AnalyzerException("Таблица символов: Попытка добавления существующей переменной ${token.position()}")
         }
         currentTree.variables[name] = Variable(properties, type, value)
     }
@@ -65,7 +66,7 @@ class TableSymbol<T> {
                 variable = treeNode.variables[name]
                 treeNode = treeNode.parent
             } else {
-                throw IllegalArgumentException("Таблица символов: Попытка получения данных у несуществующей переменной ${token.position()}")
+                throw AnalyzerException("Таблица символов: Попытка получения данных у несуществующей переменной ${token.position()}")
             }
         }
         return variable.value
