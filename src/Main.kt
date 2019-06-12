@@ -5,9 +5,9 @@ fun main() {
     val linesCodes = getLinesReadFiles("test.kt")
     val compiler = Compiler(linesCodes)
     compiler.start()
-    compiler.showTokens()
-    compiler.showRules()
-    compiler.showSymbolTable()
+ //   compiler.showTokens()
+ //   compiler.showRules()
+ //   compiler.showSymbolTable()
 }
 
 /**

@@ -18,8 +18,8 @@ import java.util.*
  * @param tokenType тип, связанный с этим токеном
  */
 class Token(
-    private val line: Int,
-    private val column: Int,
+    val line: Int,
+    val column: Int,
     val end: Int,
     val tokenString: String,
     val tokenType: TokenType
@@ -52,6 +52,16 @@ enum class TokenType {
     val isAuxiliary: Boolean
         get() = (this == BlockCommentNew || this == BlockCommentEnd || this == LineComment
                 || this == NewLine || this == Tab || this == WhiteSpace || this == EndLine)
+
+    val isCompiler: Boolean
+        get() = (
+            this == Return || this == CharConstant || this == IntConstant || this == If || this == Else ||
+            this == While || this == OpenBrace || this == CloseBrace || this == OpeningCurlyBrace ||
+            this == ClosingCurlyBrace || this == OpeningSquareBrace || this == ClosingSquareBrace ||
+            this == Comma || this == Plus || this == Minus || this == Multiply || this == Divide ||
+            this == EqualEqual || this == Equal || this == NotEqual ||  this == Greater || this == Less ||
+            this == Identifier || this == Function || this == Class
+                )
 }
 
 class RegExToken {

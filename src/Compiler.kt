@@ -1,5 +1,7 @@
 import lexer.Lexer
+import lexer.Token
 import parser.Parser
+import parser.TokenAnalyzer
 import tableSymbol.SymbolTableBuilder
 import java.io.File
 import java.io.FileNotFoundException
@@ -30,6 +32,16 @@ internal class Compiler(
         lexer()
         parser()
         symbolTable()
+
+        val tokens = mutableListOf<Token>()
+        for (token in lexer.tokens) {
+            if (token.tokenType.isCompiler) {
+                tokens.add(token)
+            }
+        }
+        val tokenAnalyzer = TokenAnalyzer(tokens)
+        tokenAnalyzer.refactorTokens()
+        println(tokenAnalyzer.showFunction())
     }
 
     /**
@@ -76,25 +88,15 @@ internal class Compiler(
      */
     /**
      * Получение всех токенов в "читаемой" форме
-     * @param isAll выводить ли все токены, или только основные
      * @return оисание токенов
      */
-    private fun getTokens(isAll: Boolean): String {
+    private fun getTokens(): String {
         val str = StringBuilder()
-        var i = 0
         for (token in lexer.tokens) {
-            if (token.tokenType.isAuxiliary) {
-                if (isAll) {
-                    str.append("   ")
-                        .append(token.toString())
-                        .append("\n")
-                }
-            } else {
-                i++
-                str.append(i)
-                    .append("   ")
-                    .append(token.toString())
-                    .append("\n")
+            if (token.tokenType.isCompiler) {
+                str.append("   ")
+                    .append(token.tokenString)
+                    .append("   \n")
             }
         }
         return str.toString()
@@ -115,7 +117,7 @@ internal class Compiler(
 |            L E X E R             |
 |----------------------------------|
         $defaultColor""".trimIndent())
-        println(getTokens(false))
+        println(getTokens())
     }
 
     fun showRules(){
