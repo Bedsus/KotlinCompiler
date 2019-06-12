@@ -60,6 +60,8 @@ class Parser {
 
     private lateinit var tokenList: List<Token>
 
+  //  private val funBody = mutableMapOf<String, >()
+
     /**
      * Анализирует источник, представленный списком токенов, используя указанные LL (1) правила грамматики
      *
@@ -372,7 +374,7 @@ class Parser {
                              */
                             val s: Symbol =
                                 if (Character.isUpperCase(symbolName[0]))
-                                    if(symbolName == "Int" || symbolName == "Char" ||
+                                    if(symbolName == "Int" || symbolName == "Char" || symbolName == "Array" ||
                                         symbolName == "Array<Int>" || symbolName == "Array<Char>")
                                         Terminal(code++, symbolName)
                                     else

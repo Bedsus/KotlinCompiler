@@ -37,7 +37,9 @@ internal class Compiler(
      */
     private fun symbolTable(){
         for (token in lexer.tokens) {
-            symbolTable.addVariableSymbolTable(token)
+            if(!token.tokenType.isAuxiliary) {
+                symbolTable.addVariableSymbolTable(token)
+            }
         }
     }
 

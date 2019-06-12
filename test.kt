@@ -8,8 +8,9 @@ class Test {
     /**
      * Comments Block yyy-lya-lya
      */
-    fun myFunc1(args: Array<Char>): Int {
-        val array : Array<Int> = Array(5) {  }
+    fun main(args: Array<Char>): Int {
+        val array : Array<Int> = Array(5)
+        array[4] = 9
         value = 4
         while ((a + d) * d < 200) {
             if (d == 5) {
@@ -23,11 +24,12 @@ class Test {
         val t3: Int = 3
         t1 = 3
         // call methods
-        val b: Int = myFunc2(3, 4, t1)
+        val b: Int = myFunc2(3, 4)
+        main1()
         return a
     }
 
-    val res = 111
+    val res: Int = 111
 
     private fun myFunc2(b: Int, c: Int): Int {
         if (true) {
@@ -57,6 +59,5 @@ class Test {
         }
     }
 }
-
 
 

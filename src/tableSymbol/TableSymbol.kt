@@ -17,11 +17,11 @@ class TableSymbol<T> {
     /**
      * Уровень погружения узла дерева, увеличивается каждый раз, как создается узел
      */
-    private var level = 0
+    private var level : Int = 0
     /**
      * Основной узел дерева
      */
-    private val treeNode = TreeNode<T>(level, "main", mutableMapOf())
+    private val treeNode = TreeNode<T>(level, "MAIN", mutableMapOf())
     /**
      * Текуший узел. В него будут добавлятся переменные
      */
@@ -43,6 +43,10 @@ class TableSymbol<T> {
     fun previousTreeNode() {
         currentTree = currentTree.parent ?: return
         level--
+        if (level == 2) {
+            currentTree = currentTree.parent ?: return
+            level--
+        }
     }
 
     /**
@@ -67,7 +71,7 @@ class TableSymbol<T> {
                 variable = treeNode.variables[name]
                 treeNode = treeNode.parent
             } else {
-                throw AnalyzerException("Таблица символов: Попытка получения данных у несуществующей переменной ${token.position()}")
+                throw AnalyzerException("Таблица символов: Попытка получения данных у несуществующей переменной ${token.tokenString} ${token.position()}")
             }
         }
         return variable.value

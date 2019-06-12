@@ -10,7 +10,7 @@ MethodOneParam -> id TypeBlock
 MethodParamContinue -> , MethodOneParam MethodParamContinue | EPSILON
 Variables -> var id Assignment | val id Assignment
 Assignment -> TypeBlock = Expression
-TypeBlock -> : Type | EPSILON
+TypeBlock -> : Type | [ intConst ] | EPSILON
 Type -> Int | Char | Array<Int> | Array<Char>
 MethodBody -> Statement MethodBody | EPSILON
 Statement -> VarDecl | IfElseBlock | WhileBlock | ReturnBlock | BlockDecl
@@ -27,8 +27,8 @@ Link -> . id ( MethodValues ) Link | EPSILON
 MethodValues -> Expression ValueContinue | EPSILON
 ValueContinue -> , Expression ValueContinue | EPSILON
 BoolExpr -> true | false | Expression CompareOp Expression 
-Expression -> Term ExprOp | Array ( intConst ) {  }
+Expression -> Term ExprOp | Array ( intConst )
 Term -> intConst | charConst | id Variable2 | ( Expression )
 ExprOp -> ArithmOp Term ExprOp | EPSILON
-ArithmOp -> + | - | * | / | =
+ArithmOp -> + | - | * | /
 CompareOp -> > | < | == | !=
