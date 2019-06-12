@@ -158,8 +158,8 @@ class Parser {
                 s = when (token.tokenType) {
                     TokenType.Identifier -> nameToSymbol["id"] as Terminal
                     TokenType.IntConstant -> nameToSymbol["intConst"] as Terminal
-                    TokenType.DoubleConstant -> nameToSymbol["doubleConst"] as Terminal
-                    else -> throw RuntimeException("Something is wrong!")
+                    TokenType.CharConstant -> nameToSymbol["charConst"] as Terminal
+                    else -> throw RuntimeException("Something is wrong! ${token.tokenString}")
                 }
             }
             input.push(s as Terminal?)
@@ -368,11 +368,12 @@ class Parser {
                         if (!nameToSymbol.containsKey(symbolName)) {
                             /**
                              * Считываение нетерминальных символов (начинаются с заглавной буквы)
-                             * Исключения это Int и Double
+                             * Исключения это Int, Char, Array
                              */
                             val s: Symbol =
                                 if (Character.isUpperCase(symbolName[0]))
-                                    if(symbolName == "Int" || symbolName == "Double")
+                                    if(symbolName == "Int" || symbolName == "Char" ||
+                                        symbolName == "Array<Int>" || symbolName == "Array<Char>")
                                         Terminal(code++, symbolName)
                                     else
                                         NonTerminal(code++, symbolName)

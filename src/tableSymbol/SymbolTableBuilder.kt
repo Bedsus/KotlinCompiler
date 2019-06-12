@@ -22,7 +22,7 @@ class SymbolTableBuilder {
 
     private var name: String? = null
     private var properties: Properties? = null
-    private var type: String? = null
+    private var type: TokenType? = null
 
     private var nameNode: String? = null
 
@@ -57,17 +57,11 @@ class SymbolTableBuilder {
                 TokenType.Identifier -> {
                     if (name == null) {
                         name = token.tokenString
-                    } else if (type == null) {
-                        addVariable(token.tokenString, token)
                     }
                 }
-                // =
-                TokenType.Equal -> {
-                    addVariable(null, token)
-                }
-                // Double
-                TokenType.Double, TokenType.Int -> {
-                    addVariable(token.tokenString, token)
+                // Type
+                TokenType.Char, TokenType.Int, TokenType.ArrayChar, TokenType.ArrayInt -> {
+                    addVariable(token.tokenType, token)
                 }
                 // ':', ' '
                 TokenType.Extends, TokenType.WhiteSpace -> { }
@@ -97,7 +91,7 @@ class SymbolTableBuilder {
                     }
                 }
                 // (i: Int, d: Double) - игнорируем
-                TokenType.WhiteSpace, TokenType.CloseBrace, TokenType.Extends, TokenType.Int, TokenType.Double -> { }
+                TokenType.WhiteSpace, TokenType.CloseBrace, TokenType.Extends, TokenType.Int, TokenType.Char -> { }
                 else -> {
                     isCreateNode = false
                     nameNode = null
@@ -150,9 +144,9 @@ class SymbolTableBuilder {
         }
     }
 
-    private fun addVariable(type: String?, token: Token){
+    private fun addVariable(type: TokenType, token: Token){
         if (name != null) {
-            symbolTable.addVariable(name!!, properties ?: Properties.Val, type ?: "None", "", token)
+            symbolTable.addVariable(name!!, properties ?: Properties.Val, type, "", token)
             isCreateValue = false
             name = null
             properties = null

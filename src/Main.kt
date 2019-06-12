@@ -25,7 +25,7 @@ private fun getLinesReadFiles(file: String): List<LinesCode> {
             do {
                 val ch = c.toChar()
                 if (ch == '\n') {
-                    if (!temp.isEmpty()) {
+                    if (temp.isNotEmpty()) {
                         lines.add(LinesCode(position, temp))
                         temp = ""
                         position++

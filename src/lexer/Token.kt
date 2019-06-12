@@ -39,10 +39,10 @@ class Token(
  */
 enum class TokenType {
 
-    BlockCommentNew, BlockCommentEnd, LineComment, WhiteSpace, Tab, NewLine, CloseBrace, OpenBrace, Value, Variable,
-    Class, Function, Int, OpeningCurlyBrace, ClosingCurlyBrace, DoubleConstant, IntConstant, Plus, Minus, Multiply,
-    CommentLine, Divide, Point, EqualEqual, Equal, NotEqual, Greater, Less, Public, Private,  Double, False,
-    True, Null, Return, Extends, If, While, Else, Comma, EndLine, OpeningGenericBrace, ClosingGenericBrace, Identifier;
+    BlockCommentNew, BlockCommentEnd, LineComment, SingleQuote, WhiteSpace, Tab, NewLine, CloseBrace, OpenBrace, Value, Variable,
+    Class, Function, Int, Char, ArrayInt, ArrayChar, OpeningCurlyBrace, ClosingCurlyBrace, CharConstant, IntConstant, Plus, Minus, Multiply,
+    CommentLine, Divide, Point, EqualEqual, Equal, NotEqual, Public, Private,  False,
+    True, Null, Return, Extends, If, While, Else, Comma, EndLine, Greater, Less, Identifier;
 
     /**
      * Определяет, является ли этот токен вспомогательным
@@ -56,7 +56,7 @@ enum class TokenType {
 
 class RegExToken {
     /** Сопоставление типа токена с его регулярным выражением  */
-    var regEx = TreeMap<TokenType, String>()
+    private var regEx = TreeMap<TokenType, String>()
 
     init{
         createRegEx()
@@ -75,8 +75,6 @@ class RegExToken {
         regEx[TokenType.WhiteSpace] = "( ).*"
         regEx[TokenType.OpenBrace] = "(\\().*"
         regEx[TokenType.CloseBrace] = "(\\)).*"
-        regEx[TokenType.OpeningGenericBrace] = "(\\<).*"
-        regEx[TokenType.ClosingGenericBrace] = "(\\>).*"
         regEx[TokenType.Extends] = "(:).*"
         regEx[TokenType.Value] = "\\b(val)\\b.*"
         regEx[TokenType.Variable] = "\\b(var)\\b.*"
@@ -84,10 +82,12 @@ class RegExToken {
         regEx[TokenType.Comma] = "(,).*"
         regEx[TokenType.OpeningCurlyBrace] = "(\\{).*"
         regEx[TokenType.ClosingCurlyBrace] = "(\\}).*"
-        regEx[TokenType.DoubleConstant] = "\\b(\\d{1,9}\\.\\d{1,32})\\b.*"
+        regEx[TokenType.CharConstant] = "('([a-zA-Z]{1})').*"
         regEx[TokenType.IntConstant] = "\\b(\\d{1,9})\\b.*"
         regEx[TokenType.Int] = "\\b(Int)\\b.*"
-        regEx[TokenType.Double] = "\\b(Int|Double)\\b.*"
+        regEx[TokenType.Char] = "\\b(Char)\\b.*"
+        regEx[TokenType.ArrayInt] = "(Array<Int>).*"
+        regEx[TokenType.ArrayChar] = "(Array<Char>).*"
         regEx[TokenType.Tab] = "(\\t).*"
         regEx[TokenType.EndLine] = "(\\r).*"
         regEx[TokenType.NewLine] = "(\\n).*"

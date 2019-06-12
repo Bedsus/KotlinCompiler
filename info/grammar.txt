@@ -6,14 +6,12 @@ RestOfClassMember -> Method | Variables
 Method -> fun id MethodContinue
 MethodContinue -> ( MethodParams ) TypeBlock { MethodBody }
 MethodParams -> MethodOneParam MethodParamContinue | EPSILON
-MethodOneParam -> id : Type
+MethodOneParam -> id TypeBlock
 MethodParamContinue -> , MethodOneParam MethodParamContinue | EPSILON
 Variables -> var id Assignment | val id Assignment
 Assignment -> TypeBlock = Expression
-TypeBlock -> : Type Generic | EPSILON
-Generic -> < Type > | EPSILON
-Type -> id | BasicType
-BasicType -> Int | Double
+TypeBlock -> : Type | EPSILON
+Type -> Int | Char | Array<Int> | Array<Char>
 MethodBody -> Statement MethodBody | EPSILON
 Statement -> VarDecl | IfElseBlock | WhileBlock | ReturnBlock | BlockDecl
 BlockDecl -> { MethodBody }
@@ -29,8 +27,8 @@ Link -> . id ( MethodValues ) Link | EPSILON
 MethodValues -> Expression ValueContinue | EPSILON
 ValueContinue -> , Expression ValueContinue | EPSILON
 BoolExpr -> true | false | Expression CompareOp Expression 
-Expression -> Term ExprOp | null
-Term -> intConst | doubleConst | id Variable2 | ( Expression )
+Expression -> Term ExprOp | Array ( intConst ) {  }
+Term -> intConst | charConst | id Variable2 | ( Expression )
 ExprOp -> ArithmOp Term ExprOp | EPSILON
 ArithmOp -> + | - | * | / | =
 CompareOp -> > | < | == | !=

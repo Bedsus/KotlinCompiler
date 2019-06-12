@@ -4,6 +4,7 @@ import AnalyzerException
 import blueColor
 import defaultColor
 import lexer.Token
+import lexer.TokenType
 import violetColor
 
 /**
@@ -47,7 +48,7 @@ class TableSymbol<T> {
     /**
      * Добавление переменной
      */
-    fun addVariable(name: String, properties: Properties, type: String, value: T, token: Token) {
+    fun addVariable(name: String, properties: Properties, type: TokenType, value: T, token: Token) {
         val currentVariable = currentTree.variables[name]
         if (currentVariable != null) {
             throw AnalyzerException("Таблица символов: Попытка добавления существующей переменной ${token.position()}")
@@ -85,7 +86,7 @@ class TableSymbol<T> {
 class TreeNode<T>(private val number: Int, private val name: String, val variables : MutableMap<String, Variable<T>>) {
 
     var parent : TreeNode<T>? = null
-    var children = mutableListOf<TreeNode<T>>()
+    private var children = mutableListOf<TreeNode<T>>()
 
     fun addChild(node : TreeNode<T>) {
         children.add(node)
@@ -117,7 +118,7 @@ class TreeNode<T>(private val number: Int, private val name: String, val variabl
  * @param type тип переменной
  * @param value вложенное значение переменной
  */
-class Variable<T>(val properties: Properties, val type: String, var value: T)
+class Variable<T>(val properties: Properties, val type: TokenType, var value: T)
 
 /**
  * Свойства переменой

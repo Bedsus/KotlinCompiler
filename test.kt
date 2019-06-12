@@ -1,18 +1,18 @@
 class Test {
 
-    private var value: Double = 0.943 - 0.3239
+    private var value: Int = 1
     private var a: Int = 10 // intConst
-    private var d: Double = 0.1
+    private var d: Int = 0
+    val c : Char = 'c'
 
     /**
      * Comments Block yyy-lya-lya
      */
-    fun myFunc1(args: String): Int {
+    fun myFunc1(args: Array<Char>): Int {
         val array : Array<Int> = Array(5) {  }
-        value = 0.0001
-        Test.myFunc2(5.0, 10)
+        value = 4
         while ((a + d) * d < 200) {
-            if (d == 0.1) {
+            if (d == 5) {
                 a = a + 5
             } else {
                 a = a - 5
@@ -23,18 +23,17 @@ class Test {
         val t3: Int = 3
         t1 = 3
         // call methods
-        val b: Double = myFunc2(3.0, 4, t1)
+        val b: Int = myFunc2(3, 4, t1)
         return a
     }
 
     val res = 111
 
-    private fun myFunc2(b: Double, c: Int): Double {
-       // val c = 0
+    private fun myFunc2(b: Int, c: Int): Int {
         if (true) {
             b = b + (d - a)
         } else {
-            var s: String = 5
+            var s: Int = 5
         }
         if (c < 2) {
             d = d * 2
@@ -46,14 +45,14 @@ class Test {
 
 
     fun main1() {
-        val eps: Double = 2.7
-        val pi: Double = 3.14
+        val eps: Int = 2
+        val pi: Int = 3
         {
-            val x: String = String()
-            val y: Test = Test()
+            val x: Int = 5
+            val y: Int = 5
             {
-                val x1: String = String()
-                val y2: Test = Test()
+                val x1: Char = 'x'
+                val y2: Char = 'y'
             }
         }
     }
