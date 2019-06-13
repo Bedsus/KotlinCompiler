@@ -25,7 +25,7 @@ class TableSymbol<T> {
     /**
      * Текуший узел. В него будут добавлятся переменные
      */
-    private var currentTree = treeNode
+    var currentTree = treeNode
 
     /**
      * Создание узла (нового scope)
@@ -41,12 +41,36 @@ class TableSymbol<T> {
      * Откат по дереву на предыдущий узел (уровень)
      */
     fun previousTreeNode() {
-        currentTree = currentTree.parent ?: return
+        previous()
         level--
         if (level == 2) {
-            currentTree = currentTree.parent ?: return
+            previous()
             level--
         }
+    }
+
+    fun previous() {
+        currentTree = currentTree.parent ?: return
+    }
+
+    fun setCurrentNode(name: String) : Boolean {
+        val nodes: MutableList<TreeNode<T>>? = currentTree.children
+        for(node in nodes ?: mutableListOf()) {
+            if(node.name == name){
+                currentTree = node
+                return true
+            }
+        }
+        return false
+      //  throw AnalyzerException("Таблица символов: Узел $name среди ${currentTree.children} не найден")
+    }
+
+    fun showCurrentValue() : String {
+        var s = ""
+        for ((key, value) in currentTree.variables) {
+            s += " $blueColor  ${value.properties} $key : ${value.type} $defaultColor \n"
+        }
+        return s
     }
 
     /**
@@ -77,7 +101,7 @@ class TableSymbol<T> {
         return variable.value
     }
 
-    fun showTreeNode() = currentTree.toString()
+    fun showTreeNode() : String = currentTree.toString()
 }
 
 
@@ -87,10 +111,10 @@ class TableSymbol<T> {
  * @param number имя переменной
  * @param variables тип переменной
  */
-class TreeNode<T>(private val number: Int, private val name: String, val variables : MutableMap<String, Variable<T>>) {
+class TreeNode<T>(val number: Int, val name: String, val variables : MutableMap<String, Variable<T>>) {
 
     var parent : TreeNode<T>? = null
-    private var children = mutableListOf<TreeNode<T>>()
+    var children = mutableListOf<TreeNode<T>>()
 
     fun addChild(node : TreeNode<T>) {
         children.add(node)

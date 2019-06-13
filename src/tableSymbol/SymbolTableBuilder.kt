@@ -5,7 +5,7 @@ import lexer.TokenType
 
 class SymbolTableBuilder {
 
-    private val symbolTable = TableSymbol<String>()
+    val symbolTable = TableSymbol<String>()
 
     /**
      * Режим записи новой переменной

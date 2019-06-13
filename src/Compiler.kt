@@ -23,7 +23,7 @@ internal class Compiler(
 
     private val lexer = Lexer()
     private val parser = Parser()
-    private val symbolTable = SymbolTableBuilder()
+    private val symbolTableBuilder = SymbolTableBuilder()
 
     /**
      * запускаем процесс компиляции
@@ -39,7 +39,7 @@ internal class Compiler(
                 tokens.add(token)
             }
         }
-        val tokenAnalyzer = TokenAnalyzer(tokens)
+        val tokenAnalyzer = TokenAnalyzer(tokens, symbolTableBuilder.symbolTable)
         tokenAnalyzer.refactorTokens()
         println(tokenAnalyzer.showFunction())
     }
@@ -50,7 +50,7 @@ internal class Compiler(
     private fun symbolTable(){
         for (token in lexer.tokens) {
             if(!token.tokenType.isAuxiliary) {
-                symbolTable.addVariableSymbolTable(token)
+                symbolTableBuilder.addVariableSymbolTable(token)
             }
         }
     }
@@ -135,7 +135,7 @@ internal class Compiler(
 |     S Y M B O L   T A B L E      |
 |----------------------------------|
         $defaultColor""".trimIndent())
-        println(symbolTable.show())
+        println(symbolTableBuilder.show())
     }
 }
 
